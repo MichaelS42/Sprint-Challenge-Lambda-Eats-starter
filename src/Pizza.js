@@ -9,6 +9,7 @@ export default function Pizza() {
     name: "",
     specialinstructions: "",
     pizzasize: "",
+    pizzasauce: "",
     pep: false,
     onions: false,
     olives: false,
@@ -22,6 +23,7 @@ export default function Pizza() {
     name: "",
     specialinstructions: "",
     pizzasize: "",
+    pizzasauce: "",
     pep: "",
     onions: "",
     olives: "",
@@ -31,12 +33,14 @@ export default function Pizza() {
 
   const formSchema = yup.object().shape({
     name: yup.string().required("Name is a required field"),
+    specialinstructions: yup.string().required("Please enter instructions here or N/A for no instructions"),
     pep: yup.boolean().oneOf([true, false], "please pick a topping"),
     onions: yup.boolean().oneOf([true, false], "please pick a topping"),
     olives: yup.boolean().oneOf([true, false], "please pick a topping"),
     peppers: yup.boolean().oneOf([true, false], "please pick a topping"),
     nothing: yup.boolean().oneOf([true, false], "please pick a topping"),
     pizzasize: yup.string(),
+    pizzasauce: yup.string()
   });
 
   const validateChange = e => {
@@ -71,6 +75,7 @@ export default function Pizza() {
           name: "",
           specialinstructions: "",
           pizzasize: "",
+          pizzasauce: "",
           pep: "",
           onions: "",
           olives: "",
@@ -131,6 +136,21 @@ export default function Pizza() {
         </select>
       </label>
 
+      <label htmlFor="pizzasauce">
+        What kind of sauce?
+        <select id="pizzasauce" name="pizzasauce" onChange={inputChange}>
+          <option value="Original Red">Original Red</option>
+          <option value="Garlic Ranch">Garlic Ranch</option>
+          <option value="BBQ">BBQ</option>
+        </select>
+      </label>
+
+      <label htmlFor="switch">
+        Gluten Free?
+        <input type="checkbox"/>
+        <span class="slider round"></span>
+      </label>
+
         Any toppings?
       <label htmlFor="pep" className="pep">
         <input
@@ -182,175 +202,14 @@ export default function Pizza() {
         none
       </label>
 
-      <pre>{JSON.stringify(post, null, 2)}</pre>
+      <pre htmlFor="Add to Order" className="Add to Order"
+        data-cy="Add to Order">
+        {JSON.stringify(post, null, 2)}
+        </pre>
 
-      <button disabled={isButtonDisabled} type="submit">
+      <button disabled={isButtonDisabled} type="Add to Order">
         Add to Order
       </button>
     </form>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState, useEffect } from "react";
-// import * as yup from "yup";
-// import axios from "axios";
-
-// export default function Form() {
-//   const [post, setPost] = useState();
-//   // managing state for our form inputs
-//   const [formState, setFormState] = useState({
-//     name: "",
-//     email: "",
-//     terms: ""
-//   });
-
-//   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-//   const [errors, setErrors] = useState({
-//     name: "",
-//     email: "",
-//     terms: ""
-//   });
-
-//   const formSchema = yup.object().shape({
-//     name: yup
-//     .string()
-//     .required("*Name is a required field"),
-//     email: yup
-//       .string()
-//       .email("*You must use a valid email address")
-//       .required(),
-//     terms: yup
-//     .boolean()
-//     .oneOf([true], "*Please click checkbox to agree"),
-//   });
-
-//   const validateChange = e => {
-//     yup
-//       .reach(formSchema, e.target.name)
-//       .validate(e.target.value)
-//       .then(valid => {
-//         setErrors({ ...errors, [e.target.name]: "" });
-//       })
-//       .catch(err => {
-//         console.log("error!", err);
-//         setErrors({ ...errors, [e.target.name]: err.errors[0] });
-//       });
-//   };
-
-//   console.log("error state", errors);
-//   useEffect(() => {
-//     formSchema.isValid(formState).then(valid => {
-//       console.log("valid?", valid);
-//       setIsButtonDisabled(!valid);
-//     });
-//   }, [formState]);
-
-//   // onSubmit function
-//   const formSubmit = e => {
-//     e.preventDefault();
-//     axios
-//       .post("https://reqres.in/api/users", formState)
-//       .then(response => {
-//         setPost(response.data);
-//         setFormState({
-//           name: "",
-//           email: "",
-//           terms: ""
-//         });
-//       })
-//       .catch(err => console.log(err.response));
-//   };
-
-//   // onChange function
-//   const inputChange = e => {
-//     console.log("input changed!", e.target.value);
-//     e.persist();
-//     const newFormData = {
-//       ...formState,
-//       [e.target.name]:
-//         e.target.type === "checkbox" ? e.target.checked : e.target.value
-//     };
-//     validateChange(e);
-//     setFormState(newFormData);
-//   };
-
-
-//   return (
-//     <form onSubmit={formSubmit}>
-//       <label htmlFor="name">
-//         Name
-//         <input
-//           id="name"
-//           type="text"
-//           name="name"
-//           onChange={inputChange}
-//           value={formState.name}
-//           data-cy="name"
-//         />
-//         {errors.name.length > 0 ? <p className="error">{errors.name}</p> : null}
-//       </label>
-
-
-//       <label htmlFor="email">
-//         Email
-//         <input
-//           type="text"
-//           name="email"
-//           onChange={inputChange}
-//           value={formState.email}
-//           data-cy="email"
-//         />
-//         {errors.email.length > 0 ? ( <p className="error">{errors.email}</p>) : null}
-//       </label>
-
-
-//       <label htmlFor="terms" className="terms">
-//         <input
-//           type="checkbox"
-//           name="terms"
-//           checked={formState.terms}
-//           onChange={inputChange}
-//         />
-//         Terms & Conditions
-//       </label>
-//       <pre>{JSON.stringify(post, null, 2)}</pre>
-
-
-//       <button disabled={isButtonDisabled} type="submit">
-//         Submit
-//       </button>
-      
-//     </form>
-//   );
-// }
